@@ -45,11 +45,14 @@ Switch (3 rotas)
 ├── workflows/hr-buddy-webhook-guardrail.template.json
 ├── docs/
 │   ├── plano-de-testes.md                  # Plano completo (14 seções)
+│   ├── relatorio-execucao.md               # Resultados dos 14 casos executados
 │   ├── casos-de-teste/
 │   │   ├── CT-MEM.md                       # Memória e isolamento de sessão
 │   │   ├── CT-GRD.md                       # Guardrail de classificação
 │   │   ├── CT-QUA.md                       # Qualidade RAG e alucinação
 │   │   └── CT-SEC.md                       # IDOR, injection, jailbreak
+│   ├── evidencias/
+│   │   └── BUG-001-IDOR.md                 # IDOR confirmado — output n8n + causa raiz
 │   └── Run_Test.md                         # Guia de execução dos testes
 ├── smoke_all.py                            # Roda os 3 smokes em sequência
 ├── conftest.py                             # Configura Groq como LLM de avaliação
