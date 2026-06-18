@@ -1,0 +1,16 @@
+# Ambiente e dependências
+.env
+.venv/
+__pycache__/
+*.pyc
+
+# Cache de ferramentas
+.pytest_cache/
+.deepeval/
+.early.coverage/
+
+# Relatórios gerados (outputs, não versionar)
+relatorios/
+
+# Workflow com IDs de credenciais n8n (versionar apenas o sanitizado)
+workflows/HR Buddy — Webhook + Guardrail.json
