@@ -14,11 +14,11 @@ python3 -m venv .venv
 O arquivo `.env` já existe na raiz do projeto. Edite se necessário:
 
 ```
-GROQ_API_KEY=gsk_...          # LLM de avaliação do DeepEval
-# N8N_WEBHOOK_URL=...         # opcional — já tem default no código
+GROQ_API_KEY=gsk_...                                          # obrigatório — LLM de avaliação do DeepEval
+N8N_WEBHOOK_URL=https://SEU_WORKSPACE.app.n8n.cloud/webhook/hr-buddy  # obrigatório — endpoint do workflow
 ```
 
-> O `conftest.py` carrega o `.env` automaticamente ao rodar qualquer teste. Não é necessário exportar variáveis manualmente.
+> O `conftest.py` carrega o `.env` automaticamente ao rodar qualquer teste. Não é necessário exportar variáveis manualmente. Ambas as variáveis são obrigatórias — a ausência de qualquer uma levanta `EnvironmentError` antes de iniciar os testes.
 
 ### 3. Ativar o workflow no n8n
 
@@ -234,11 +234,15 @@ Chat HR Buddy/
 ├── docs/
 │   ├── Run_Test.md                    # Este guia
 │   ├── plano-de-testes.md             # Plano completo (14 seções)
-│   └── casos-de-teste/
-│       ├── CT-MEM.md                  # Memória e isolamento de sessão
-│       ├── CT-GRD.md                  # Guardrail de classificação
-│       ├── CT-QUA.md                  # Qualidade RAG e alucinação
-│       └── CT-SEC.md                  # IDOR, injection, jailbreak
+│   ├── relatorio-execucao.md          # Resultados do smoke test, log de defeitos
+│   ├── casos-de-teste/
+│   │   ├── CT-MEM.md                  # Memória e isolamento de sessão (7 casos)
+│   │   ├── CT-GRD.md                  # Guardrail de classificação (10 casos)
+│   │   ├── CT-QUA.md                  # Qualidade RAG e alucinação (12 casos)
+│   │   └── CT-SEC.md                  # IDOR, injection, jailbreak (10 casos)
+│   └── evidencias/
+│       ├── BUG-001-IDOR.md            # Evidência do bug IDOR confirmado
+│       └── BUG-001-IDOR-n8n-output.png
 └── relatorios/                        # Outputs gerados (não versionar)
     ├── giskard_smoke.json
     ├── garak_smoke.json
