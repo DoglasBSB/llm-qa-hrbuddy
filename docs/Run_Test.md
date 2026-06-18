@@ -213,28 +213,35 @@ garak --generator_option_file tests/garak/garak_n8n.py \
 ```
 Chat HR Buddy/
 ├── .env                               # Chaves de API (não versionar)
+├── .env.example                       # Template de variáveis de ambiente
 ├── .gitignore
 ├── conftest.py                        # Carrega .env e configura Groq para DeepEval
 ├── requirements.txt                   # deepeval, groq, python-dotenv, pytest, requests
+├── smoke_all.py                       # Roda os 3 smokes em sequência
 ├── tests/
 │   ├── deepeval/
 │   │   └── test_hrbuddy_completo.py   # Suite principal (39 testes, 4 categorias)
 │   ├── giskard/
-│   │   └── giskard_n8n.py             # Scan automático (40 inputs, relatório HTML)
+│   │   ├── giskard_n8n.py             # Scan automático (40 inputs, relatório HTML)
+│   │   └── giskard_smoke.py           # Smoke — 5 categorias críticas
 │   └── garak/
-│       └── garak_n8n.py               # Red team adversarial (gerador para CLI)
+│       ├── garak_n8n.py               # Red team adversarial (gerador para CLI)
+│       └── garak_smoke.py             # Smoke — 5 ataques adversariais
 ├── scripts/
 │   └── relatorio_consolidado.py       # Agrega resultados → JSON + HTML + PDF
 ├── workflows/
-│   ├── hr-buddy-webhook-guardrail.json  # Workflow produção (webhook + telegram + guardrail)
-│   └── 5HFI6MoQflZfKRMD-My_workflow.json  # Ingestão do vector store (rodar 1x)
+│   └── hr-buddy-webhook-guardrail.template.json  # Workflow sanitizado (sem IDs de credenciais)
 ├── docs/
-│   ├── Run_Test.md
-│   ├── plano-de-testes.md
-│   └── contrato-dados-mysql.md
+│   ├── Run_Test.md                    # Este guia
+│   ├── plano-de-testes.md             # Plano completo (14 seções)
+│   └── casos-de-teste/
+│       ├── CT-MEM.md                  # Memória e isolamento de sessão
+│       ├── CT-GRD.md                  # Guardrail de classificação
+│       ├── CT-QUA.md                  # Qualidade RAG e alucinação
+│       └── CT-SEC.md                  # IDOR, injection, jailbreak
 └── relatorios/                        # Outputs gerados (não versionar)
-    ├── giskard_hrbuddy.html
-    ├── garak-hrbuddy*.json
+    ├── giskard_smoke.json
+    ├── garak_smoke.json
     ├── consolidado.json
     └── consolidado.html
 ```
