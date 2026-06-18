@@ -3,7 +3,7 @@
 **Feature:** Assistente virtual de RH com RAG + MySQL + Memória  
 **Versão:** 1.0  
 **Ambiente:** n8n Cloud + Railway MySQL + Cohere + Telegram  
-**QA:** Douglas  
+**QA:** Francisco Dôglas
 **Data:** Junho 2026  
 
 ---
