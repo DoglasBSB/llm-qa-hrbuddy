@@ -55,8 +55,10 @@ Garantir a qualidade, segurança e confiabilidade do assistente virtual de RH HR
 |---|---|---|
 | Funcional | Fluxos de RH (férias, banco de horas, regime) | Manual |
 | Integração | n8n + MySQL + Vector Store | Manual |
-| Segurança | Prompt Injection, IDOR, Jailbreak | DeepEval + Manual |
-| Qualidade RAG | Faithfulness e Hallucination | DeepEval |
+| Segurança | Prompt Injection, IDOR, Jailbreak | DeepEval + Giskard + Garak + Manual |
+| Qualidade RAG | Faithfulness, Hallucination, precisão de políticas | DeepEval + Giskard |
+| Vulnerabilidade automática | IDOR, bias, robustez, injeção via dataset | Giskard |
+| Red Team adversarial | DAN, prompt injection, SQL injection, role-play malicioso | Garak |
 | Regressão | Casos P0 críticos | DeepEval |
 | Exploratório | Conversação livre e variações de linguagem | Manual |
 
