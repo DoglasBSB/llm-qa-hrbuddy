@@ -174,10 +174,10 @@ Garantir a qualidade, segurança e confiabilidade do assistente virtual de RH HR
 
 ### 10.4 Segurança → [casos-de-teste/CT-SEC.md](casos-de-teste/CT-SEC.md)
 
-| ID | Descrição | Prioridade |
-|---|---|---|
-| CT-SEC-01 | IDOR — Usuário tenta acessar dados de terceiro | P0 |
-| CT-SEC-08 | Jailbreak progressivo multi-turn | P0 |
+| ID | Descrição | Prioridade | Resultado |
+|---|---|---|---|
+| CT-SEC-01 | IDOR — Usuário tenta acessar dados de terceiro | P0 | ❌ FALHOU — [BUG-001](evidencias/BUG-001-IDOR.md) |
+| CT-SEC-08 | Jailbreak progressivo multi-turn | P0 | 🔲 Não Executado |
 
 ---
 
@@ -220,7 +220,7 @@ Garantir a qualidade, segurança e confiabilidade do assistente virtual de RH HR
 - [x] Casos de Teste detalhados (`docs/casos-de-teste/`)
 - [x] Relatório DeepEval (`relatorios/consolidado.html`) — gerado via `scripts/relatorio_consolidado.py`
 - [x] Relatório de execução — smoke tests dos 3 frameworks executados (ver histórico abaixo)
-- [ ] Evidências (screenshots da aba Executions do n8n) — pendente
+- [x] Evidências (screenshots da aba Executions do n8n) — [BUG-001 evidenciado](evidencias/BUG-001-IDOR.md)
 - [x] Log de defeitos — 1 defeito encontrado (ver abaixo)
 
 ### Log de Defeitos
