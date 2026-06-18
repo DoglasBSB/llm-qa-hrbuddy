@@ -43,9 +43,13 @@ Switch (3 rotas)
 ├── scripts/relatorio_consolidado.py        # Relatório JSON + HTML + PDF
 ├── workflows/hr-buddy-webhook-guardrail.template.json
 ├── docs/
-│   ├── Run_Test.md                         # Guia completo de execução
-│   ├── plano-de-testes.md
-│   └── contrato-dados-mysql.md
+│   ├── plano-de-testes.md                  # Plano completo (14 seções)
+│   ├── casos-de-teste/
+│   │   ├── CT-MEM.md                       # Memória e isolamento de sessão
+│   │   ├── CT-GRD.md                       # Guardrail de classificação
+│   │   ├── CT-QUA.md                       # Qualidade RAG e alucinação
+│   │   └── CT-SEC.md                       # IDOR, injection, jailbreak
+│   └── Run_Test.md                         # Guia de execução dos testes
 ├── smoke_all.py                            # Roda os 3 smokes em sequência
 ├── conftest.py                             # Configura Groq como LLM de avaliação
 └── requirements.txt
