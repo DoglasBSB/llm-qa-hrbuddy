@@ -1,7 +1,7 @@
 # Casos de Teste — Memória
 
 **Categoria:** Memória conversacional (Simple Memory / sessionId)
-**Rastreabilidade:** CT-MEM-01, CT-MEM-02, CT-MEM-06, CT-MEM-07
+**Rastreabilidade:** CT-MEM-01 a CT-MEM-07
 
 ---
 
@@ -97,6 +97,124 @@
 - **Contexto de 5 turns:** Simple Memory tem Context Window Length = 5 — testar se o 6º turn ainda lembra a identidade
 - **Pergunta ambígua "e o meu?":** agente deve inferir o contexto correto
 - **Pergunta fora do escopo seguida de RH:** verificar se memória persiste após classificação pelo guardrail
+
+---
+
+## CT-MEM-03: Banco de horas na continuidade da sessão
+
+| Campo | Valor |
+|---|---|
+| **ID** | CT-MEM-03 |
+| **Funcionalidade** | Memória — Persistência multi-turn |
+| **Prioridade** | P1 – Alto |
+| **Tipo** | Funcional / Integração |
+| **Status** | 🔲 Não Executado |
+| **Tempo estimado** | 3 minutos |
+
+> ⚠️ **Dependência:** executar na mesma sessão do CT-MEM-02 com Eric Monné identificado.
+
+**Objetivo:** Verificar que o agente responde banco de horas no terceiro turn sem solicitar reidentificação.
+
+**Pré-condições:**
+- CT-MEM-01 e CT-MEM-02 executados na mesma sessão
+
+**Dados de Teste:**
+- **Entrada:** "E meu banco de horas?"
+- **Dado esperado do MySQL:** banco_horas = 8.0
+
+### Passos
+
+1. Na mesma sessão dos testes anteriores, enviar: "E meu banco de horas?"
+   → Agente NÃO deve pedir identificação
+
+2. Verificar resposta
+   → Agente informa 8 horas de banco para Eric Monné
+
+### Resultado Esperado
+
+> Agente informa 8 horas de banco de horas sem solicitar reidentificação. Demonstra continuidade de contexto no terceiro turn.
+
+### Edge Cases
+
+- **Pergunta ambígua "E o meu?":** agente deve inferir o contexto de banco de horas
+- **Saldo negativo:** para Ana Lima (-4h) verificar se o agente comunica o débito corretamente
+
+---
+
+## CT-MEM-04: Regime de trabalho na continuidade da sessão
+
+| Campo | Valor |
+|---|---|
+| **ID** | CT-MEM-04 |
+| **Funcionalidade** | Memória — Persistência multi-turn |
+| **Prioridade** | P1 – Alto |
+| **Tipo** | Funcional / Integração |
+| **Status** | 🔲 Não Executado |
+| **Tempo estimado** | 3 minutos |
+
+> ⚠️ **Dependência:** executar na mesma sessão do CT-MEM-03.
+
+**Objetivo:** Verificar que o agente responde regime de trabalho no quarto turn sem reidentificação.
+
+**Dados de Teste:**
+- **Entrada:** "Qual meu regime de trabalho?"
+- **Dado esperado do MySQL:** regime = híbrido
+
+### Passos
+
+1. Na mesma sessão, enviar: "Qual meu regime de trabalho?"
+   → Agente NÃO deve pedir identificação
+
+2. Verificar resposta
+   → Agente informa "híbrido" para Eric Monné
+
+### Resultado Esperado
+
+> Agente informa regime híbrido sem solicitar reidentificação. Quarto turn consecutivo demonstra estabilidade da memória.
+
+### Edge Cases
+
+- **Regimes diferentes:** Carlos Oliveira = presencial, Ana Lima = remoto — verificar especificidade
+- **Pergunta sobre outro atributo:** "E meu plano de saúde?" — verificar se memória persiste para benefícios
+
+---
+
+## CT-MEM-05: Retorno ao contexto pessoal após tópico diferente
+
+| Campo | Valor |
+|---|---|
+| **ID** | CT-MEM-05 |
+| **Funcionalidade** | Memória — Resiliência de contexto |
+| **Prioridade** | P1 – Alto |
+| **Tipo** | Funcional / Integração |
+| **Status** | 🔲 Não Executado |
+| **Tempo estimado** | 4 minutos |
+
+**Objetivo:** Verificar que o agente retorna ao contexto do usuário identificado após responder uma pergunta sobre política geral.
+
+**Pré-condições:**
+- Eric Monné identificado na sessão
+
+**Dados de Teste:**
+- **Turn intermediário:** "Como funciona a licença maternidade?"
+- **Retorno:** "Voltando às minhas férias, posso parcelar?"
+
+### Passos
+
+1. Com Eric identificado, enviar: "Como funciona a licença maternidade?"
+   → Agente responde sobre política geral
+
+2. Enviar: "Voltando às minhas férias, posso parcelar?"
+   → Agente deve relacionar com os 25 dias do Eric e informar regras de parcelamento
+
+### Resultado Esperado
+
+> Agente responde sobre parcelamento das férias do Eric (25 dias disponíveis) e informa as regras: até 3 períodos, mínimo 14 dias no maior. Não pede reidentificação.
+
+### Edge Cases
+
+- **Múltiplos tópicos gerais:** 3 perguntas de política antes de voltar ao pessoal — verificar se memória persiste
+- **Context Window Length = 5:** se o turno de identificação sair da janela, agente pede nome novamente
 
 ---
 
