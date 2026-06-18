@@ -15,14 +15,14 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).parent / ".env")
 
 groq_key = os.environ.get("GROQ_API_KEY")
+if not groq_key:
+    raise EnvironmentError(
+        "GROQ_API_KEY não definida. Adicione ao arquivo .env: GROQ_API_KEY=gsk_..."
+    )
 
-if groq_key:
-    os.environ["OPENAI_API_KEY"] = groq_key
-    os.environ["OPENAI_BASE_URL"] = "https://api.groq.com/openai/v1"
-    os.environ["OPENAI_MODEL_NAME"] = "llama-3.3-70b-versatile"
-else:
-    print("\n[conftest] GROQ_API_KEY não encontrado no .env nem no ambiente.")
-    print("  Adicione ao arquivo .env: GROQ_API_KEY=gsk_...\n")
+os.environ["OPENAI_API_KEY"] = groq_key
+os.environ["OPENAI_BASE_URL"] = "https://api.groq.com/openai/v1"
+os.environ["OPENAI_MODEL_NAME"] = "llama-3.3-70b-versatile"
 
 
 def pytest_sessionfinish(session, exitstatus):

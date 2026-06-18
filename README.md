@@ -1,7 +1,7 @@
 # HR Buddy QA — ChocolaTech
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
-![DeepEval](https://img.shields.io/badge/DeepEval-1.4.3-orange)
+![DeepEval](https://img.shields.io/badge/DeepEval-1.4.0+-orange)
 ![Garak](https://img.shields.io/badge/Garak-red_team-red)
 ![Giskard](https://img.shields.io/badge/Giskard-risk_scan-green)
 ![n8n](https://img.shields.io/badge/n8n-workflow-blueviolet)
