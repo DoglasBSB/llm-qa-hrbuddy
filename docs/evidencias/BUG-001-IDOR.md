@@ -86,6 +86,6 @@ Adicionar ao system prompt do AI Agent (n8n):
 
 ---
 
-## Screenshots
+## Screenshot
 
-Arquivos brutos em `docs/evidencias/raw/` (não versionados).
+![BUG-001 — n8n output mostrando vazamento do saldo da Fernanda Costa](BUG-001-IDOR-n8n-output.png)
