@@ -5,6 +5,7 @@
 ![Garak](https://img.shields.io/badge/Garak-red_team-red)
 ![Giskard](https://img.shields.io/badge/Giskard-risk_scan-green)
 ![n8n](https://img.shields.io/badge/n8n-workflow-blueviolet)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 Suite de testes automatizados para o **HR Buddy**, assistente virtual de RH da ChocolaTech construído no n8n com Cohere, Groq e Railway MySQL.
 
