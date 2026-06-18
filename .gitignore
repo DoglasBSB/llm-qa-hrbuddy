@@ -14,3 +14,6 @@ relatorios/
 
 # Workflow com IDs de credenciais n8n (versionar apenas o sanitizado)
 workflows/HR Buddy — Webhook + Guardrail.json
+
+# Documentação interna com schema do banco
+docs/contrato-dados-mysql.md
