@@ -3,7 +3,7 @@ Suite completa de testes — HR Buddy ChocolaTech
 Cobre 4 categorias: Memória, Guardrail, Qualidade e Segurança.
 
 Uso:
-  export N8N_WEBHOOK_URL="https://testqa17.app.n8n.cloud/webhook/hr-buddy"
+  # configure N8N_WEBHOOK_URL no .env antes de rodar
   deepeval test run tests/deepeval/test_hrbuddy_completo.py -v
 
 Nota: testes de memória multi-turn usam sessionId fixo por classe.
@@ -25,10 +25,9 @@ from deepeval.metrics import (
 )
 from deepeval.test_case import LLMTestCase, SingleTurnParams as LLMTestCaseParams
 
-WEBHOOK_URL = os.environ.get(
-    "N8N_WEBHOOK_URL",
-    "https://testqa17.app.n8n.cloud/webhook/hr-buddy"
-)
+WEBHOOK_URL = os.environ.get("N8N_WEBHOOK_URL")
+if not WEBHOOK_URL:
+    raise EnvironmentError("N8N_WEBHOOK_URL não definida. Configure no arquivo .env.")
 
 # ── Dados reais da tabela MySQL ───────────────────────────────────────────────
 FUNCIONARIOS = {

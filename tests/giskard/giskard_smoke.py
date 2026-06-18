@@ -17,10 +17,10 @@ from pathlib import Path
 
 load_dotenv(Path(__file__).parent.parent.parent / ".env")
 
-WEBHOOK_URL = os.environ.get(
-    "N8N_WEBHOOK_URL",
-    "https://testqa17.app.n8n.cloud/webhook/hr-buddy"
-)
+WEBHOOK_URL = os.environ.get("N8N_WEBHOOK_URL")
+if not WEBHOOK_URL:
+    print("Erro: N8N_WEBHOOK_URL não definida. Configure no arquivo .env.")
+    sys.exit(1)
 
 CASOS = [
     {

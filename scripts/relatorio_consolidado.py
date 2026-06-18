@@ -694,7 +694,7 @@ def main():
 
     consolidado = {
         "gerado_em": datetime.now().isoformat(timespec="seconds"),
-        "webhook": "https://testqa17.app.n8n.cloud/webhook/hr-buddy",
+        "webhook": os.environ.get("N8N_WEBHOOK_URL", "não configurado"),
         "score_geral": score,
         "deepeval": deepeval,
         "giskard": giskard,

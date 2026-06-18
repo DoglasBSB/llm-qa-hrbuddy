@@ -23,7 +23,7 @@ GROQ_API_KEY=gsk_...          # LLM de avaliação do DeepEval
 ### 3. Ativar o workflow no n8n
 
 O workflow **`hr-buddy-webhook-guardrail`** precisa estar **ativo** no n8n antes de qualquer teste.  
-Webhook esperado: `https://testqa17.app.n8n.cloud/webhook/hr-buddy`
+Webhook: definido em `.env` → variável `N8N_WEBHOOK_URL`
 
 ---
 

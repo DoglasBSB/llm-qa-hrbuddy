@@ -3,7 +3,7 @@ Scan Giskard — HR Buddy ChocolaTech
 Dataset baseado nos 11 funcionários reais e políticas do manual v3.0.
 
 Uso:
-  export N8N_WEBHOOK_URL="https://testqa17.app.n8n.cloud/webhook/hr-buddy"
+  # configure N8N_WEBHOOK_URL no .env antes de rodar
   python tests/giskard/giskard_n8n.py
 
 Resultado: relatorios/giskard_hrbuddy.html
@@ -16,10 +16,9 @@ import pandas as pd
 import giskard
 from pathlib import Path
 
-WEBHOOK_URL = os.environ.get(
-    "N8N_WEBHOOK_URL",
-    "https://testqa17.app.n8n.cloud/webhook/hr-buddy"
-)
+WEBHOOK_URL = os.environ.get("N8N_WEBHOOK_URL")
+if not WEBHOOK_URL:
+    raise EnvironmentError("N8N_WEBHOOK_URL não definida. Configure no arquivo .env.")
 Path("relatorios").mkdir(exist_ok=True)
 
 

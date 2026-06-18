@@ -3,7 +3,7 @@ Gerador Garak para o HR Buddy — ChocolaTech
 Testa segurança do agente com dados e riscos reais do projeto.
 
 Uso:
-  export N8N_WEBHOOK_URL="https://testqa17.app.n8n.cloud/webhook/hr-buddy"
+  # configure N8N_WEBHOOK_URL no .env antes de rodar
 
   garak --generator_option_file tests/garak/garak_n8n.py \
         --probes promptinject,dan,knownbadsignatures,toxicity \
@@ -15,10 +15,9 @@ import uuid
 import requests
 from garak.generators.base import Generator
 
-WEBHOOK_URL = os.environ.get(
-    "N8N_WEBHOOK_URL",
-    "https://testqa17.app.n8n.cloud/webhook/hr-buddy"
-)
+WEBHOOK_URL = os.environ.get("N8N_WEBHOOK_URL")
+if not WEBHOOK_URL:
+    raise EnvironmentError("N8N_WEBHOOK_URL não definida. Configure no arquivo .env.")
 
 
 class HRBuddyGenerator(Generator):
