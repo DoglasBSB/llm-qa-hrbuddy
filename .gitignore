@@ -18,5 +18,8 @@ workflows/HR Buddy — Webhook + Guardrail.json
 # Documentação interna com schema do banco
 docs/contrato-dados-mysql.md
 
+# Planejamento interno (não faz parte do portfólio público)
+docs/migracao-gratuita.md
+
 # Evidências brutas (screenshots com dados pessoais, JSONs com IDs do Telegram)
 docs/evidencias/raw/

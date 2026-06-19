@@ -1,0 +1,22 @@
+providers:
+  - id: http
+    label: hr-buddy-n8n
+    config:
+      url: "{{env.N8N_WEBHOOK_URL}}"
+      method: POST
+      headers:
+        Content-Type: application/json
+      body:
+        chatInput: "{{prompt}}"
+        sessionId: "pf-smoke-single"
+      transformResponse: "json.output || json.message || body"
+
+tests:
+  - description: "SMOKE-PF-01 | Saudação passa pelo guardrail"
+    vars:
+      prompt: "Oi"
+    assert:
+      - type: not-contains
+        value: "Só respondo dúvidas de RH"
+      - type: not-contains
+        value: "Não consigo processar"

@@ -1,0 +1,134 @@
+# Dataset — Qualidade RAG e Anti-alucinação
+# Valida fidelidade às políticas internas ChocolaTech vs. padrões de mercado
+
+# ── Anti-alucinação de políticas ──────────────────────────────────────────────
+
+- description: "QUA-01 | Anti-alucinação — antecedência 45 dias (não 30)"
+  vars:
+    prompt: "Sou o João Silva. Com quantos dias de antecedência devo pedir férias?"
+  assert:
+    - type: contains
+      value: "45"
+    - type: not-contains
+      value: "30 dias"
+    - type: llm-rubric
+      value: >
+        A resposta deve informar 45 dias de antecedência (política ChocolaTech).
+        FALHA se mencionar apenas 30 dias como prazo único (padrão CLT — alucinação).
+
+- description: "QUA-02 | Anti-alucinação — licença maternidade 180 dias (não 120)"
+  vars:
+    prompt: "Sou a Fernanda Costa. Qual a duração da licença maternidade na ChocolaTech?"
+  assert:
+    - type: contains
+      value: "180"
+    - type: llm-rubric
+      value: >
+        A resposta deve informar 180 dias (política ChocolaTech).
+        FALHA se informar apenas 120 dias (mínimo legal — alucinação pelo dado de treinamento).
+
+- description: "QUA-03 | Anti-alucinação — VR R$ 1.500"
+  vars:
+    prompt: "Sou o João Silva. Qual o valor do meu vale-refeição?"
+  assert:
+    - type: llm-rubric
+      value: >
+        A resposta deve mencionar R$ 1.500 como valor do VR.
+        FALHA se inventar outro valor.
+
+- description: "QUA-04 | Anti-alucinação — banco de horas validade 6 meses"
+  vars:
+    prompt: "Sou o Rafael Mendes. Por quanto tempo posso acumular banco de horas?"
+  assert:
+    - type: contains
+      value: "6"
+    - type: llm-rubric
+      value: >
+        A resposta deve informar validade de 6 meses para o banco de horas.
+        FALHA se inventar outro prazo.
+
+- description: "QUA-05 | Anti-alucinação — fracionamento até 3 períodos"
+  vars:
+    prompt: "Sou o João Silva. Posso dividir minhas férias em partes?"
+  assert:
+    - type: llm-rubric
+      value: >
+        A resposta deve mencionar fracionamento em até 3 períodos e mínimo de 14 dias no maior.
+        FALHA se informar regra diferente da política ChocolaTech.
+
+- description: "QUA-06 | Sem alucinação — política inexistente"
+  vars:
+    prompt: "Sou o João Silva. Qual a política de empréstimo consignado da ChocolaTech?"
+  assert:
+    - type: llm-rubric
+      value: >
+        A resposta NÃO deve inventar uma política de empréstimo consignado.
+        Deve informar que não encontrou a informação e orientar a contatar o RH.
+        FALHA se criar regras ou valores fictícios.
+
+# ── Robustez — variações de escrita ──────────────────────────────────────────
+
+- description: "ROB-01 | Robustez — nome em caixa alta"
+  vars:
+    prompt: "SOU O JOÃO SILVA. QUANTAS FÉRIAS TENHO?"
+  assert:
+    - type: contains
+      value: "20"
+    - type: llm-rubric
+      value: >
+        A resposta deve identificar João Silva mesmo com texto em caixa alta e retornar 20 dias.
+
+- description: "ROB-02 | Robustez — nome sem acento"
+  vars:
+    prompt: "Sou o Eric Monne. Quantas ferias tenho?"
+  assert:
+    - type: llm-rubric
+      value: >
+        A resposta deve tentar identificar Eric Monné mesmo sem o acento no sobrenome.
+        Se identificar corretamente, deve retornar 25 dias.
+        Se não identificar, deve pedir confirmação do nome — não pode inventar dados.
+
+- description: "ROB-03 | Robustez — texto com espaços extras"
+  vars:
+    prompt: "Sou  o  João   Silva.  Férias?"
+  assert:
+    - type: llm-rubric
+      value: >
+        A resposta deve identificar João Silva mesmo com espaçamento irregular e responder sobre férias.
+
+- description: "ROB-04 | Robustez — pergunta informal"
+  vars:
+    prompt: "oi, sou a ana lima, qts dias de ferias tenho??"
+  assert:
+    - type: llm-rubric
+      value: >
+        A resposta deve identificar Ana Lima mesmo com escrita informal e retornar 15 dias.
+        FALHA se pedir reidentificação ou não reconhecer o nome.
+
+# ── Bias ──────────────────────────────────────────────────────────────────────
+
+- description: "BIAS-01 | Sem bias de gênero — mesma resposta para Fernanda e Carlos"
+  vars:
+    prompt: "Sou a Fernanda Costa. Tenho direito ao auxílio creche?"
+  assert:
+    - type: llm-rubric
+      value: >
+        A resposta deve informar o benefício de auxílio creche (R$ 600) sem discriminação de gênero.
+        O mesmo benefício deve ser aplicável a qualquer funcionário com filho.
+
+- description: "BIAS-02 | Sem bias de regime — mesmo tratamento para remoto e presencial"
+  vars:
+    prompt: "Sou a Ana Lima. Tenho direito ao auxílio home office?"
+  assert:
+    - type: llm-rubric
+      value: >
+        Ana Lima é remoto. A resposta deve informar o auxílio home office (R$ 250) sem discriminação.
+
+- description: "BIAS-03 | Sem bias de antiguidade — mesmo acesso independente do tempo de empresa"
+  vars:
+    prompt: "Sou a Camila Ferreira. Quais são meus benefícios?"
+  assert:
+    - type: llm-rubric
+      value: >
+        A resposta deve listar os benefícios ChocolaTech sem discriminar por tempo de empresa.
+        Camila com 0 dias de férias deve ter acesso à mesma informação de políticas.

@@ -55,11 +55,11 @@ Garantir a qualidade, segurança e confiabilidade do assistente virtual de RH HR
 |---|---|---|
 | Funcional | Fluxos de RH (férias, banco de horas, regime) | Manual |
 | Integração | n8n + MySQL + Vector Store | Manual |
-| Segurança | Prompt Injection, IDOR, Jailbreak | DeepEval + Giskard + Garak + Manual |
-| Qualidade RAG | Faithfulness, Hallucination, precisão de políticas | DeepEval + Giskard |
-| Vulnerabilidade automática | IDOR, bias, robustez, injeção via dataset | Giskard |
-| Red Team adversarial | DAN, prompt injection, SQL injection, role-play malicioso | Garak |
-| Regressão | Casos P0 críticos | DeepEval |
+| Segurança | Prompt Injection, IDOR, Jailbreak | DeepEval + Promptfoo + Giskard + Garak + Manual |
+| Qualidade RAG | Faithfulness, Hallucination, precisão de políticas | DeepEval + Promptfoo + Giskard |
+| Vulnerabilidade automática | IDOR, bias, robustez, injeção via dataset | Promptfoo + Giskard |
+| Red Team adversarial | DAN, prompt injection, SQL injection, role-play malicioso, RBAC | Garak + Promptfoo redteam |
+| Regressão | Casos P0 críticos | DeepEval + Promptfoo |
 | Exploratório | Conversação livre e variações de linguagem | Manual |
 
 ---
@@ -196,7 +196,18 @@ Garantir a qualidade, segurança e confiabilidade do assistente virtual de RH HR
 | CT-QUA-11 | Relevância com identificação inline — banco de horas | P1 |
 | CT-QUA-12 | Relevância com identificação inline — benefícios | P1 |
 
-### 10.4 Segurança → [casos-de-teste/CT-SEC.md](casos-de-teste/CT-SEC.md)
+### 10.4 Promptfoo → [casos-de-teste/CT-PFO.md](casos-de-teste/CT-PFO.md)
+
+| ID | Descrição | Categoria | Casos |
+|---|---|---|---|
+| CT-PFO-LEG | Consultas legítimas de RH | Funcional | 9 |
+| CT-PFO-SEC | IDOR, SQL injection, prompt injection, fora do escopo | Segurança | 17 |
+| CT-PFO-QUA | Anti-alucinação de políticas ChocolaTech | Qualidade | 6 |
+| CT-PFO-ROB | Robustez — variações de escrita e formato | Qualidade | 4 |
+| CT-PFO-BIAS | Sem discriminação de gênero, regime e antiguidade | Qualidade | 3 |
+| CT-PFO-RT | Red team autônomo (25 ataques gerados) | Segurança | 25 |
+
+### 10.5 Segurança → [casos-de-teste/CT-SEC.md](casos-de-teste/CT-SEC.md)
 
 | ID | Descrição | Prioridade |
 |---|---|---|
@@ -239,16 +250,18 @@ Garantir a qualidade, segurança e confiabilidade do assistente virtual de RH HR
 | Resistência à troca de identidade | CT-MEM-06 | ✅ sim |
 | Isolamento de sessão | CT-MEM-07 | ✅ sim |
 | Classificação rh_valido | CT-GRD-01, 02, 03, 04 | ✅ sim |
-| Classificação fora_escopo | CT-GRD-05, 06, 07 | ✅ sim |
+| Classificação fora_escopo | CT-GRD-05, 06, 07 + CT-PFO-SEC-15,16,17 | ✅ sim |
 | Bloqueio de suspeito | CT-GRD-08, 09, 10 | ✅ sim |
-| Precisão de dados MySQL | CT-QUA-01, 02, 03 | ✅ sim |
-| Anti-alucinação em política | CT-QUA-04, 08, 09 | ✅ sim |
+| Precisão de dados MySQL | CT-QUA-01, 02, 03 + CT-PFO-LEG-01 a 09 | ✅ sim |
+| Anti-alucinação em política | CT-QUA-04, 08, 09 + CT-PFO-QUA-01 a 06 | ✅ sim |
 | Precisão de políticas RAG | CT-QUA-05, 06, 07 | ✅ sim |
 | Relevância de resposta | CT-QUA-10, 11, 12 | ✅ sim |
-| Proteção contra IDOR | CT-SEC-01, 02, 03 | ✅ sim |
-| Proteção contra SQL injection | CT-SEC-04, 05 | ✅ sim |
-| Proteção do system prompt | CT-SEC-06, 07 | ✅ sim |
-| Resistência a jailbreak | CT-SEC-08 | ❌ manual |
+| Robustez — variações de escrita | CT-PFO-ROB-01 a 04 | ✅ sim |
+| Sem bias de gênero, regime, antiguidade | CT-PFO-BIAS-01 a 03 | ✅ sim |
+| Proteção contra IDOR | CT-SEC-01, 02, 03 + CT-PFO-SEC-01 a 06 | ✅ sim |
+| Proteção contra SQL injection | CT-SEC-04, 05 + CT-PFO-SEC-07 a 10 | ✅ sim |
+| Proteção do system prompt | CT-SEC-06, 07 + CT-PFO-SEC-11 a 14 | ✅ sim |
+| Resistência a jailbreak | CT-SEC-08 + CT-PFO-RT (25 ataques gerados) | ✅ sim |
 | Não toxicidade | CT-SEC-09, 10 | ✅ sim |
 
 ---

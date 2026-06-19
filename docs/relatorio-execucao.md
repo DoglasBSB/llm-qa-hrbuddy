@@ -41,6 +41,10 @@
 
 ## Giskard — Smoke Test
 
+> **Nota:** `giskard_smoke.py` foi descontinuado após a adição do Promptfoo ao stack.
+> Os mesmos cenários (e mais) estão cobertos em `tests/promptfoo/casos/` com LLM-as-judge.
+> Os resultados abaixo são do último ciclo em que o smoke foi executado.
+
 **Comando executado:**
 ```bash
 .venv/bin/python tests/giskard/giskard_smoke.py
@@ -104,7 +108,10 @@
 
 ## Próximos Passos
 
+- [ ] Executar Promptfoo smoke (6 casos) — primeiro ciclo do novo framework
+- [ ] Executar Promptfoo dataset completo (35 casos) — cobertura ampliada de IDOR e anti-alucinação
+- [ ] Executar suite completa DeepEval (39 testes) — cobertura total antes de corrigir BUG-001
 - [ ] Corrigir BUG-001 no system prompt do workflow n8n
-- [ ] Reexecutar CT-SEC-01 e GSK-02 após correção para fechar o bug
+- [ ] Reexecutar CT-SEC-01 e CT-PFO-SEC-01 após correção para fechar o bug
 - [ ] Executar CT-SEC-08 (jailbreak progressivo multi-turn) — não executado neste ciclo
-- [ ] Executar suite completa DeepEval (39 testes) após correção do BUG-001
+- [ ] Executar Giskard scan completo (`giskard_n8n.py`) — auto-detecção pós-correção do BUG-001

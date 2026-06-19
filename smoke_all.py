@@ -1,13 +1,17 @@
 """
-Roda os 3 smoke tests em sequência e imprime resultado consolidado.
+Roda os smoke tests em sequência e imprime resultado consolidado.
 
 Uso:
-  .venv/bin/python smoke_all.py
+  .venv/bin/python smoke_all.py              # DeepEval + Garak
+  .venv/bin/python smoke_all.py --all        # inclui Promptfoo (requer Node.js + npx)
 """
 
 import subprocess
 import sys
+import shutil
 import time
+
+_incluir_promptfoo = "--all" in sys.argv
 
 TESTES = [
     {
@@ -20,17 +24,26 @@ TESTES = [
         ],
     },
     {
-        "nome": "Giskard Smoke",
-        "cmd": [sys.executable, "tests/giskard/giskard_smoke.py"],
-    },
-    {
         "nome": "Garak Smoke",
         "cmd": [sys.executable, "tests/garak/garak_smoke.py"],
     },
+    *([{
+        "nome": "Promptfoo Smoke",
+        "cmd": [
+            "npx", "promptfoo", "eval",
+            "--config", "tests/promptfoo/promptfooconfig.yaml",
+            "--no-cache"
+        ],
+    }] if _incluir_promptfoo else []),
 ]
 
 
 def main():
+    if _incluir_promptfoo and not shutil.which("npx"):
+        print("AVISO: npx não encontrado. Instale Node.js para rodar o Promptfoo.")
+        print("       Rodando sem o Promptfoo Smoke.\n")
+        TESTES.pop()
+
     print("=" * 60)
     print("  SMOKE TESTS — HR BUDDY CHOCOLATECH")
     print("=" * 60)

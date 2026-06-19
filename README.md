@@ -2,6 +2,7 @@
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
 ![DeepEval](https://img.shields.io/badge/DeepEval-1.4.0+-orange)
+![Promptfoo](https://img.shields.io/badge/Promptfoo-eval-5C4EE5)
 ![Garak](https://img.shields.io/badge/Garak-red_team-red)
 ![Giskard](https://img.shields.io/badge/Giskard-risk_scan-green)
 ![n8n](https://img.shields.io/badge/n8n-workflow-blueviolet)
@@ -11,12 +12,13 @@ Suite de testes automatizados para o **HR Buddy**, assistente virtual de RH da C
 
 ## Visão geral
 
-O HR Buddy responde dúvidas de RH (férias, banco de horas, benefícios, licenças) identificando o funcionário pelo nome e consultando dados reais do MySQL. Esta suite valida qualidade, segurança e robustez do agente com três frameworks complementares.
+O HR Buddy responde dúvidas de RH (férias, banco de horas, benefícios, licenças) identificando o funcionário pelo nome e consultando dados reais do MySQL. Esta suite valida qualidade, segurança e robustez do agente com quatro frameworks complementares.
 
 | Framework | O que testa | Testes |
 |---|---|---|
-| **DeepEval** | Memória de sessão, guardrails, qualidade de resposta, segurança | 39 testes |
-| **Giskard** | Vulnerabilidades automáticas: IDOR, injection, alucinação, bias | 40 inputs |
+| **DeepEval** | Memória de sessão, guardrails, qualidade RAG, segurança | 39 testes |
+| **Promptfoo** | Avaliação por dataset YAML, anti-alucinação, robustez, bias, IDOR | 35 casos |
+| **Giskard** | Scan automático de vulnerabilidades: IDOR, injection, alucinação, bias | 40 inputs |
 | **Garak** | Red team adversarial: DAN, prompt injection, payloads maliciosos | 3 probes |
 
 ## Arquitetura do agente
@@ -36,9 +38,15 @@ Switch (3 rotas)
 
 ```
 ├── tests/
-│   ├── deepeval/test_hrbuddy_completo.py   # Suite principal (4 categorias)
-│   ├── giskard/giskard_n8n.py              # Scan automático completo
-│   ├── giskard/giskard_smoke.py            # Smoke — 5 categorias críticas
+│   ├── deepeval/test_hrbuddy_completo.py   # Suite principal (39 testes, 4 categorias)
+│   ├── promptfoo/
+│   │   ├── promptfooconfig.yaml            # Config + smoke tests Promptfoo
+│   │   ├── redteam.yaml                    # Red team autônomo
+│   │   └── casos/                          # Datasets por categoria (35 casos)
+│   │       ├── legitimos.yaml
+│   │       ├── seguranca.yaml
+│   │       └── qualidade.yaml
+│   ├── giskard/giskard_n8n.py              # Scan automático completo (40 inputs, HTML)
 │   ├── garak/garak_n8n.py                  # Gerador para CLI red team
 │   └── garak/garak_smoke.py                # Smoke — 5 ataques adversariais
 ├── scripts/relatorio_consolidado.py        # Relatório JSON + HTML + PDF
@@ -50,11 +58,12 @@ Switch (3 rotas)
 │   │   ├── CT-MEM.md                       # Memória e isolamento de sessão
 │   │   ├── CT-GRD.md                       # Guardrail de classificação
 │   │   ├── CT-QUA.md                       # Qualidade RAG e alucinação
-│   │   └── CT-SEC.md                       # IDOR, injection, jailbreak
+│   │   ├── CT-SEC.md                       # IDOR, injection, jailbreak
+│   │   └── CT-PFO.md                       # Promptfoo — dataset completo
 │   ├── evidencias/
 │   │   └── BUG-001-IDOR.md                 # IDOR confirmado — output n8n + causa raiz
 │   └── Run_Test.md                         # Guia de execução dos testes
-├── smoke_all.py                            # Roda os 3 smokes em sequência
+├── smoke_all.py                            # Roda os smokes em sequência
 ├── conftest.py                             # Configura Groq como LLM de avaliação
 └── requirements.txt
 ```
@@ -62,6 +71,7 @@ Switch (3 rotas)
 ## Pré-requisitos
 
 - Python 3.10+
+- Node.js 18+ (para Promptfoo)
 - Workflow **HR Buddy** ativo no n8n (veja `workflows/`)
 - Chave Groq gratuita em [console.groq.com](https://console.groq.com)
 
@@ -83,7 +93,11 @@ cp .env.example .env
 ### Smoke tests — verificação rápida (~1 min)
 
 ```bash
+# DeepEval + Garak
 .venv/bin/python smoke_all.py
+
+# Inclui Promptfoo (requer Node.js)
+.venv/bin/python smoke_all.py --all
 ```
 
 Roda um teste representativo de cada framework em sequência e imprime resultado consolidado.
@@ -98,8 +112,17 @@ Roda um teste representativo de cada framework em sequência e imprime resultado
 # DeepEval — suite completa (39 testes)
 .venv/bin/pytest tests/deepeval/test_hrbuddy_completo.py -v
 
-# Giskard smoke
-.venv/bin/python tests/giskard/giskard_smoke.py
+# Promptfoo — smoke (6 casos, um por categoria)
+npx promptfoo eval --config tests/promptfoo/promptfooconfig.yaml
+
+# Promptfoo — dataset completo (35 casos)
+npx promptfoo eval --config tests/promptfoo/promptfooconfig.yaml --no-cache
+
+# Promptfoo — red team autônomo (25 ataques gerados)
+npx promptfoo redteam run --config tests/promptfoo/redteam.yaml
+
+# Giskard — scan automático completo (40 inputs, gera relatorios/giskard_hrbuddy.html)
+.venv/bin/python tests/giskard/giskard_n8n.py
 
 # Garak smoke
 .venv/bin/python tests/garak/garak_smoke.py
@@ -140,6 +163,7 @@ O arquivo `workflows/hr-buddy-webhook-guardrail.template.json` é a versão sani
 Desenvolvido durante a **Imersão Agentes de IA — Alura (2026)**, com camada adicional de testes de IA/LLM aplicada pelo QA após a construção do agente.
 
 Ferramentas de teste:
-[Garak](https://github.com/NVIDIA/garak) ·
 [DeepEval](https://github.com/confident-ai/deepeval) ·
-[Giskard](https://github.com/Giskard-AI/giskard)
+[Promptfoo](https://github.com/promptfoo/promptfoo) ·
+[Giskard](https://github.com/Giskard-AI/giskard) ·
+[Garak](https://github.com/NVIDIA/garak)
