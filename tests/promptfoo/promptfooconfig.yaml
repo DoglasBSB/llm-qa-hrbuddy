@@ -12,7 +12,7 @@ providers:
       body:
         chatInput: "{{prompt}}"
         sessionId: "pf-{{uuid}}"
-      transformResponse: "json?.output || json?.message || body || ''"
+      transformResponse: "json?.output || json?.message || text || ''"
 
 # ── LLM juiz (llm-rubric): Groq via endpoint OpenAI-compatível ───────────────
 defaultTest:
