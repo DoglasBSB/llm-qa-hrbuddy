@@ -115,7 +115,7 @@ echo -e "${CINZA}  $(date '+%H:%M:%S')${RESET}\n"
 
 cd "$ROOT_DIR"
 "$PYTHON" smoke_all.py --all 2>&1 \
-  | sed "s|${N8N_WEBHOOK_URL}|https://***.***.n8n.cloud/webhook/hr-buddy|g" \
+  | sed -u "s|${N8N_WEBHOOK_URL}|https://***.***.n8n.cloud/webhook/hr-buddy|g" \
   | tee -a "$LOG_FILE" || true
 EXIT_CODE=${PIPESTATUS[0]}
 
